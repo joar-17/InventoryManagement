@@ -28,8 +28,10 @@ namespace InventoryManagement
                 Console.Write($"\nName: {name} \nPrice: {price} \nQuantity: {quantity} \n\nPress Enter to confirm or enter cancel ");
                 if (Console.ReadLine() != "cancel")
                 {
-                    stock.Add(new Product(articleNumber, name, price, quantity));
+                    Product product = new Product(articleNumber, name, price, quantity);
+                    stock.Add(product);
                     FileHandler.Save();
+                    SqlHandler.AddProductToDb(product);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Product has been added \n");
                     Console.ResetColor();
@@ -101,6 +103,7 @@ namespace InventoryManagement
                     }
 
                     FileHandler.Save();
+                    SqlHandler.UpdateProductInDb(product);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Updates completed \n");
                     Console.ResetColor();
@@ -130,6 +133,7 @@ namespace InventoryManagement
                     Product product = stock.FirstOrDefault(obj => obj.ArticleNumber == articlenumber);
                     stock.Remove(product);
                     FileHandler.Save();
+                    SqlHandler.DeleteProductFromDb(articlenumber);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Product removed \n");
                     Console.ResetColor();
